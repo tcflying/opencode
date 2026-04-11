@@ -68,7 +68,21 @@ export const SessionRoutes = lazy(() =>
         })) {
           sessions.push(session)
         }
-        return c.json(sessions)
+        // Ensure diffs field is present - workaround for Zod filtering
+        const result = sessions.map(s => {
+          if (s.summary && !('diffs' in s.summary)) {
+            return {
+              ...s,
+              summary: {
+                ...s.summary,
+                diffs: [],
+              }
+            } as Session.Info
+          }
+          return s
+        })
+        console.log(`[API] session list returning ${result.length} sessions, first has diffs:`, result[0]?.summary?.diffs !== undefined)
+        return c.json(result)
       },
     )
     .get(

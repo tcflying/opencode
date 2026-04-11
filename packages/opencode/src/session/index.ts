@@ -61,7 +61,7 @@ export namespace Session {
             additions: row.summary_additions ?? 0,
             deletions: row.summary_deletions ?? 0,
             files: row.summary_files ?? 0,
-            diffs: row.summary_diffs ?? undefined,
+            diffs: row.summary_diffs ?? [],
           }
         : undefined
     const share = row.share_url ? { url: row.share_url } : undefined
@@ -135,8 +135,9 @@ export namespace Session {
           additions: z.number(),
           deletions: z.number(),
           files: z.number(),
-          diffs: Snapshot.FileDiff.array().optional(),
+          diffs: Snapshot.FileDiff.array(),
         })
+        .transform(s => ({ ...s, diffs: s.diffs ?? [] }))
         .optional(),
       share: z
         .object({
