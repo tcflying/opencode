@@ -71,10 +71,13 @@ export const SessionRoutes = lazy(() =>
         // Ensure diffs field is present - workaround for Zod filtering
         const result = sessions.map(s => {
           if (s.summary && !('diffs' in s.summary)) {
+            const summary = s.summary as any
             return {
               ...s,
               summary: {
-                ...s.summary,
+                additions: summary.additions,
+                deletions: summary.deletions,
+                files: summary.files,
                 diffs: [],
               }
             } as Session.Info

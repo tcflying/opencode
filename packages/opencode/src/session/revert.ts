@@ -72,6 +72,7 @@ export namespace SessionRevert {
           additions: diffs.reduce((sum, x) => sum + x.additions, 0),
           deletions: diffs.reduce((sum, x) => sum + x.deletions, 0),
           files: diffs.length,
+          diffs: diffs,
         },
       })
     }
